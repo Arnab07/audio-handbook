@@ -125,3 +125,90 @@ def compute_group_delay(audio, sr, smooth_phase=True, window_length=101, polyord
     group_delay = -dphi_df / (2 * np.pi)
 
     return freqs, group_delay
+
+
+def interpret_signal(value, metric_type):
+    # ============================================================================
+    # INTERPRETATION GUIDE
+    # ============================================================================
+    # Use these guidelines to understand what the metrics mean:
+    #
+    # PROMINENCE:
+    #   - < 2.0: Weak periodicity (noise, unvoiced sounds)
+    #   - 2.0-5.0: Moderate periodicity (could be speech or music)
+    #   - > 5.0: Strong periodicity (voiced speech, tonal music)
+    #
+    # ENTROPY:
+    #   - < 3.0: Very structured (pure tones, synthetic)
+    #   - 3.0-6.0: Moderate structure (some speech/music)
+    #   - 6.0-9.5: Balanced (natural speech, complex music)
+    #   - > 9.5: High disorder (noise, unvoiced)
+    #
+    # FLATNESS:
+    #   - Close to 0: Energy concentrated (tonal)
+    #   - 0.2-0.4: Moderate distribution (typical speech)
+    #   - > 0.5: Very uniform (noise-like)
+    #
+    # HARMONICITY_MEAN:
+    #   - < 0.3: Weak harmonics (likely not speech)
+    #   - 0.3-0.6: Moderate harmonics (could be speech/music)
+    #   - > 0.6: Strong harmonics (voiced speech/music)
+    #
+    # VOICED_RATIO:
+    #   - < 0.3: Mostly unvoiced (noise, whispers)
+    #   - 0.3-0.7: Mixed (typical natural speech)
+    #   - > 0.7: Mostly voiced (sustained tones, singing)
+    #
+    # PITCH_STD:
+    #   - ≈ 0: Constant pitch (synthetic, monotone)
+    #   - 5-30 Hz: Moderate variation (natural speech)
+    #   - > 30 Hz: High variation (expressive speech, music)
+    # ============================================================================
+    output_text = ''
+    match metric_type:
+        case "prominence":
+            if value < 2.0:
+                output_text = "Weak periodicity (noise, unvoiced sounds)"
+            elif 2.0 <= value < 5:
+                output_text = "Moderate periodicity (could be speech or music)"
+            else:
+                output_text = "Strong periodicity (voiced speech, tonal music)"
+        case "entropy":
+            if value < 3.0:
+                output_text = "Very structured (pure tones, synthetic)"
+            elif 3.0 <= value < 6:
+                output_text = "Moderate structure (some speech/music)"
+            elif 6.0 <= value < 9.5:
+                output_text = "Balanced (natural speech, complex music)"
+            else:
+                output_text = "High disorder (noise, unvoiced)"
+        case "flatness":
+            if value < 0.2:
+                output_text = "Energy concentrated (tonal)"
+            elif 0.2 <= value < 0.4:
+                output_text = "Moderate distribution (typical speech)"
+            else:
+                output_text = "Very uniform (noise-like)"
+        case "harmonicity_mean":
+            if value < 0.3:
+                output_text = "Weak harmonics (likely not speech)"
+            elif 0.3 <= value < 0.6:
+                output_text = "Moderate harmonics (could be speech/music)"
+            else:
+                output_text = "Mostly voiced (sustained tones, singing)"
+        case "voiced_ratio":
+            if value < 0.3:
+                output_text = "Mostly unvoiced (noise, whispers)"
+            elif 0.3 <= value < 0.7:
+                output_text = "Mixed (typical natural speech)"
+            else:
+                output_text = "Mostly voiced (sustained tones, singing)"
+        case "pitch_std":
+            if value < 5:
+                output_text = "Constant pitch (synthetic, monotone)"
+            elif 5 <= value < 30:
+                output_text = "Moderate variation (natural speech)"
+            else:
+                output_text = "High variation (expressive speech, music)"
+
+    return output_text
