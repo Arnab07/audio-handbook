@@ -182,5 +182,33 @@ def interpret_signal(value, metric_type):
                 output_text = "Balanced (natural speech, complex music)"
             else:
                 output_text = "High disorder (noise, unvoiced)"
+        case "flatness":
+            if value < 0.2:
+                output_text = "Energy concentrated (tonal)"
+            elif 0.2 <= value < 0.4:
+                output_text = "Moderate distribution (typical speech)"
+            else:
+                output_text = "Very uniform (noise-like)"
+        case "harmonicity_mean":
+            if value < 0.3:
+                output_text = "Weak harmonics (likely not speech)"
+            elif 0.3 <= value < 0.6:
+                output_text = "Moderate harmonics (could be speech/music)"
+            else:
+                output_text = "Mostly voiced (sustained tones, singing)"
+        case "voiced_ratio":
+            if value < 0.3:
+                output_text = "Mostly unvoiced (noise, whispers)"
+            elif 0.3 <= value < 0.7:
+                output_text = "Mixed (typical natural speech)"
+            else:
+                output_text = "Mostly voiced (sustained tones, singing)"
+        case "pitch_std":
+            if value < 5:
+                output_text = "Constant pitch (synthetic, monotone)"
+            elif 5 <= value < 30:
+                output_text = "Moderate variation (natural speech)"
+            else:
+                output_text = "High variation (expressive speech, music)"
 
     return output_text
